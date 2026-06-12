@@ -9,11 +9,30 @@
     const ctx = canvas.getContext('2d');
     let x = 50;
     let y = 50;
+    let mousex = 0;
+    let mousey = 0;
     const count = 5;
+    let mousedown = false;
 
-    for (let i = 0; i < count; i++) {
+    window.addEventListener("mouseup", () => {
+        mousedown = false;
+    });
+    canvas.addEventListener("mousemove", (event) => {
+        const rect = canvas.getBoundingClientRect();
+        mousex = event.clientX - rect.left;
+        mousey = event.clientY - rect.top;
+    });
+    async function drawdot(x, y) {
         ctx.fillStyle = "red";
         ctx.fillRect(x, y, 1, 1);
+    }
+    canvas.addEventListener("mousedown", () => {
+        mousedown = true;
+        drawdot(mousex, mousey);
+    });
+    // main loop yay
+    for (let i = 0; i < count; i++) {
+        drawdot(x,y)
         y += 1;
     }
 </script>
