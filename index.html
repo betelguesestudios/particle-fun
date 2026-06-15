@@ -48,13 +48,13 @@
     let currentwegith = parseInt(slider.value, 10);
     let yespy = parseInt(slida.value, 10)
     let giggly = parseInt(slide.value, 10);
-    let gravityPointForce = parseInt(dsadsauefgw4utrefd.value, 10);
+    let graviterpintForce = parseInt(dsadsauefgw4utrefd.value, 10);
     let x = 50;
     let y = 50;
     let mousex = 0;
     let mousey = 0;
     let mousedown = false;
-    let gravityPoint = null;
+    let graviterpint = null;
     let losbursts = [];
     let dots = [];
     inny.addEventListener('input', (e) => {
@@ -80,8 +80,8 @@
         outp.textContent = yespy
     });
     dsadsauefgw4utrefd.addEventListener('input', (e) => {
-        gravityPointForce = parseInt(e.target.value, 10);
-        frovegrave.textContent = gravityPointForce;
+        graviterpintForce = parseInt(e.target.value, 10);
+        frovegrave.textContent = graviterpintForce;
     });
     window.addEventListener("mouseup", () => {
         mousedown = false;
@@ -92,7 +92,7 @@
         mousey = event.clientY - rect.top;
     });
 
-    function getParticleRadius(wegith) {
+    function getlaradlius(wegith) {
         const minwegith = 1;
         const maxwegith = 294;
         const minRadius = 1;
@@ -101,17 +101,17 @@
         return minRadius + normalized * (maxRadius - minRadius);
     }
 
-    function adddot(x, y) {
+    function adddoot(x, y) {
         dots.push({
             x: x,
             y: y,
-            radius: getParticleRadius(currentwegith),
+            radius: getlaradlius(currentwegith),
             dx: (Math.random() - 0.5) * 8,
             dy: (Math.random() - 0.5) * 8,
             wegith: currentwegith
         });
     }
-    function drawdots(dot) {
+    function drowldoots(dot) {
         const px = Math.round(dot.x);
         const py = Math.round(dot.y);
         const radius = Math.max(1, Math.round(dot.radius));
@@ -155,16 +155,16 @@
                 life: 1
             });
         } else if (event.shiftKey) {
-            gravityPoint = { x: mousex, y: mousey };
+            graviterpint = { x: mousex, y: mousey };
         } else {
             for (let i = 0; i < yespy; i++) {
-                adddot(mousex, mousey);
+                adddoot(mousex, mousey);
             }
         }
     });
     window.addEventListener("keydown", (event) => {
         if (event.key === "Delete" || event.key === "Backspace") {
-            gravityPoint = null;
+            graviterpint = null;
             event.preventDefault();
         }
     });
@@ -183,14 +183,14 @@
 
         for (let i = 0; i < dots.length; i++) {
             let d = dots[i]
-            if (gravityPoint) {
-                let gx = gravityPoint.x - d.x;
-                let gy = gravityPoint.y - d.y;
+            if (graviterpint) {
+                let gx = graviterpint.x - d.x;
+                let gy = graviterpint.y - d.y;
                 let distance = Math.hypot(gx, gy);
                 let safdist = Math.max(distance, 8);
 
                 if (distance > 0) {
-                    let force = gravityPointForce / (safdist * safdist);
+                    let force = graviterpintForce / (safdist * safdist);
                     force = Math.min(force, 0.5);
                     const masssres = getmasssres(d.wegith);
                     d.dx += (gx / safdist) * force * masssres;
@@ -268,18 +268,18 @@
         yessy = 0;
         lodatat.fill(0);
         losphysics();
-        dots.forEach(drawdots);
-        if (gravityPoint) {
+        dots.forEach(drowldoots);
+        if (graviterpint) {
             ctx.putImageData(imageData, 0, 0);
             ctx.fillStyle = "blue";
             ctx.beginPath();
-            ctx.arc(gravityPoint.x, gravityPoint.y, 5, 0, Math.PI * 2)
+            ctx.arc(graviterpint.x, graviterpint.y, 5, 0, Math.PI * 2)
             ctx.fill();
         } else {
             ctx.putImageData(imageData, 0, 0);
         }
         dots.forEach(item => {
-            yessy += item.wegith / 602200000000000000000000.00123;
+            yessy += item.wegith / 602200000000000000000000.00123;  //btw this is avogadros number which is very sigma
         });
         grams.innerText = `${yessy.toFixed(38)} grams`;
         requestAnimationFrame(animateyay);
