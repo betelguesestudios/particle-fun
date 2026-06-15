@@ -1,6 +1,11 @@
 <!DOCTYPE html>
 <head>
     <title>yes</title>
+    <style>
+        canvas{
+            border: 2px solid black;
+        }
+    </style>
 </head>
 <body>
     <canvas id="canva" width="500" height="500"></canvas>
@@ -11,8 +16,8 @@
     <p>Particles per click <span id="yessy">100</span></p>
     <input type="range" id="stronk" min="1" max="15" step="1" value="8">
     <p>Disturbance force <span id="stonks">8</span></p>
-    <input type="range" id="gravityForce" min="100" max="3000" step="10" value="2400">
-    <p>Gravity point force <span id="gravityForceValue">2400</span></p>
+    <input type="range" id="forcelegrav" min="100" max="3000" step="10" value="2400">
+    <p>Gravity point force <span id="gravdorce">2400</span></p>
     <p>Click = Place particles</p>
     <p>Shift + Click = Create/Move gravitational point</p>
     <p>Backspace or Delete = Remove gravitational point</p>
@@ -32,13 +37,13 @@
     const outp = document.getElementById("yessy")
     const slide = document.getElementById("stronk")
     const outpt = document.getElementById("stonks")
-    const gravityForceSlider = document.getElementById("gravityForce")
-    const gravityForceOutput = document.getElementById("gravityForceValue")
+    const forcelegravSlider = document.getElementById("forcelegrav")
+    const forcelegravOutput = document.getElementById("gravdorce")
     let yessy = 0;
     let currentAtomicWeight = parseInt(slider.value, 10);
     let yespy = parseInt(slida.value, 10)
     let giggly = parseInt(slide.value, 10);
-    let gravityPointForce = parseInt(gravityForceSlider.value, 10);
+    let gravityPointForce = parseInt(forcelegravSlider.value, 10);
     let x = 50;
     let y = 50;
     let mousex = 0;
@@ -63,9 +68,9 @@
         yespy = parseInt(e.target.value, 10);
         outp.textContent = yespy
     });
-    gravityForceSlider.addEventListener('input', (e) => {
+    forcelegravSlider.addEventListener('input', (e) => {
         gravityPointForce = parseInt(e.target.value, 10);
-        gravityForceOutput.textContent = gravityPointForce;
+        forcelegravOutput.textContent = gravityPointForce;
     });
     window.addEventListener("mouseup", () => {
         mousedown = false;
