@@ -10,14 +10,17 @@
 <body>
     <canvas id="canva" width="500" height="500"></canvas>
     <p id="grams"></p>
-    <input type="range" id="numper" min="1" max="294" step="1" value="147">
-    <p>Atomic weight (moles) <span id="numped">147</span></p>
+    <input type="range" id="numper" min="1" max="294" step="1" value="1">
+    <p>Atomic weight (moles) <span id="numped">1</span></p>
     <input type="range" id="ppc" min="1" max="200" step="1" value="100">
     <p>Particles per click <span id="yessy">100</span></p>
     <input type="range" id="stronk" min="1" max="15" step="1" value="8">
     <p>Disturbance force <span id="stonks">8</span></p>
-    <input type="range" id="forcelegrav" min="100" max="3000" step="10" value="2400">
+    <input type="range" id="forcelegrav" min="100" max="120000" step="10" value="2400">
     <p>Gravity point force <span id="gravdorce">2400</span></p>
+    <input type="range" id="cnavaer" min="1" max="500" step="1" value="500">
+    <p>Canvas size <span id="candver">500</span></p>
+    <button onclick='dots.length = 0;'>Delete all particles</button>
     <p>Click = Place particles</p>
     <p>Shift + Click = Create/Move gravitational point</p>
     <p>Backspace or Delete = Remove gravitational point</p>
@@ -27,50 +30,58 @@
     const canvas = document.getElementById("canva");
     const ctx = canvas.getContext('2d');
     const grams = document.getElementById("grams")
-    const width = canvas.width;
-    const height = canvas.height;
-    const imageData = ctx.createImageData(width, height);
-    const pixelData = imageData.data;
+    let width = canvas.width;
+    let height = canvas.height;
+    let imageData = ctx.createImageData(width, height);
+    let lodatat = imageData.data;
     const slider = document.getElementById("numper");
     const output = document.getElementById("numped");
     const slida = document.getElementById("ppc")
     const outp = document.getElementById("yessy")
     const slide = document.getElementById("stronk")
     const outpt = document.getElementById("stonks")
-    const forcelegravSlider = document.getElementById("forcelegrav")
-    const forcelegravOutput = document.getElementById("gravdorce")
+    const dsadsauefgw4utrefd = document.getElementById("forcelegrav")
+    const frovegrave = document.getElementById("gravdorce")
+    const inny = document.getElementById("cnavaer")
+    const outpy = document.getElementById("candver")
     let yessy = 0;
-    let currentAtomicWeight = parseInt(slider.value, 10);
+    let currentwegith = parseInt(slider.value, 10);
     let yespy = parseInt(slida.value, 10)
     let giggly = parseInt(slide.value, 10);
-    let gravityPointForce = parseInt(forcelegravSlider.value, 10);
+    let gravityPointForce = parseInt(dsadsauefgw4utrefd.value, 10);
     let x = 50;
     let y = 50;
     let mousex = 0;
     let mousey = 0;
     let mousedown = false;
     let gravityPoint = null;
-    let burstPoints = [];
-    let dots = [
-        { x: 50, y: 50, radius: 1, dx: 3, dy: 2, atomicWeight: 1 },
-        { x: 250, y: 250, radius: 1, dx: -2, dy: 3, atomicWeight: 1 },
-        { x: 400, y: 100, radius: 1, dx: 4, dy: -3, atomicWeight: 1 }
-    ];
+    let losbursts = [];
+    let dots = [];
+    inny.addEventListener('input', (e) => {
+        const canvasSize = parseInt(e.target.value, 10);
+        outpy.textContent = canvasSize;
+        canvas.width = canvasSize;
+        canvas.height = canvasSize;
+        width = canvas.width;
+        height = canvas.height;
+        imageData = ctx.createImageData(width, height);
+        lodatat = imageData.data;
+    });
     slide.addEventListener('input', (e) => {
         giggly = parseInt(e.target.value, 10);
         outpt.textContent = giggly;
     });
     slider.addEventListener('input', (e) => {
-        currentAtomicWeight = parseInt(e.target.value, 10);
-        output.textContent = currentAtomicWeight;
+        currentwegith = parseInt(e.target.value, 10);
+        output.textContent = currentwegith;
     });
     slida.addEventListener('input', (e) => {
         yespy = parseInt(e.target.value, 10);
         outp.textContent = yespy
     });
-    forcelegravSlider.addEventListener('input', (e) => {
+    dsadsauefgw4utrefd.addEventListener('input', (e) => {
         gravityPointForce = parseInt(e.target.value, 10);
-        forcelegravOutput.textContent = gravityPointForce;
+        frovegrave.textContent = gravityPointForce;
     });
     window.addEventListener("mouseup", () => {
         mousedown = false;
@@ -81,33 +92,62 @@
         mousey = event.clientY - rect.top;
     });
 
+    function getParticleRadius(wegith) {
+        const minwegith = 1;
+        const maxwegith = 294;
+        const minRadius = 1;
+        const maxRadius = 5;
+        const normalized = (Math.min(maxwegith, Math.max(minwegith, wegith)) - minwegith) / (maxwegith - minwegith);
+        return minRadius + normalized * (maxRadius - minRadius);
+    }
+
     function adddot(x, y) {
         dots.push({
             x: x,
             y: y,
-            radius: 1,
+            radius: getParticleRadius(currentwegith),
             dx: (Math.random() - 0.5) * 8,
             dy: (Math.random() - 0.5) * 8,
-            atomicWeight: currentAtomicWeight
+            wegith: currentwegith
         });
     }
     function drawdots(dot) {
         const px = Math.round(dot.x);
         const py = Math.round(dot.y);
+        const radius = Math.max(1, Math.round(dot.radius));
 
-        if (px < 0 || px >= width || py < 0 || py >= height) {
+        if (px - radius < 0 || px + radius >= width || py - radius < 0 || py + radius >= height) {
             return;
         }
-        const index = (py * width + px) * 4;
-        pixelData[index] = 255;
-        pixelData[index + 1] = 0;
-        pixelData[index + 2] = 0;
-        pixelData[index + 3] = 255;
+
+        const speedd = Math.hypot(dot.dx, dot.dy);
+        const intensity = Math.min(1, speedd / 6);
+        const redly = Math.round(255 * intensity);
+
+        for (let oy = -radius; oy <= radius; oy++) {
+            for (let ox = -radius; ox <= radius; ox++) {
+                if (ox * ox + oy * oy > radius * radius) {
+                    continue;
+                }
+
+                const drawX = px + ox;
+                const drawY = py + oy;
+                if (drawX < 0 || drawX >= width || drawY < 0 || drawY >= height) {
+                    continue;
+                }
+
+                const index = (drawY * width + drawX) * 4;
+                lodatat[index] = redly;
+                lodatat[index + 1] = 0;
+                lodatat[index + 2] = 0;
+                lodatat[index + 3] = 255;
+            }
+        }
     }
     canvas.addEventListener("mousedown", (event) => {
         mousedown = true;
         if (event.ctrlKey) {
-            burstPoints.push({
+            losbursts.push({
                 x: mousex,
                 y: mousey,
                 radius: 140,
@@ -129,15 +169,15 @@
         }
     });
 
-    function getMassResistance(atomicWeight) {
-        return 1 / Math.max(1, atomicWeight / 20);
+    function getmasssres(wegith) {
+        return 1 / Math.max(1, wegith / 20);
     }
 
     function losphysics() {
-        for (let i = burstPoints.length - 1; i >= 0; i--) {
-            burstPoints[i].life -= 0.04;
-            if (burstPoints[i].life <= 0) {
-                burstPoints.splice(i, 1);
+        for (let i = losbursts.length - 1; i >= 0; i--) {
+            losbursts[i].life -= 0.04;
+            if (losbursts[i].life <= 0) {
+                losbursts.splice(i, 1);
             }
         }
 
@@ -147,38 +187,38 @@
                 let gx = gravityPoint.x - d.x;
                 let gy = gravityPoint.y - d.y;
                 let distance = Math.hypot(gx, gy);
-                let safeDistance = Math.max(distance, 8);
+                let safdist = Math.max(distance, 8);
 
                 if (distance > 0) {
-                    let force = gravityPointForce / (safeDistance * safeDistance);
+                    let force = gravityPointForce / (safdist * safdist);
                     force = Math.min(force, 0.5);
-                    const massResistance = getMassResistance(d.atomicWeight);
-                    d.dx += (gx / safeDistance) * force * massResistance;
-                    d.dy += (gy / safeDistance) * force * massResistance;
+                    const masssres = getmasssres(d.wegith);
+                    d.dx += (gx / safdist) * force * masssres;
+                    d.dy += (gy / safdist) * force * masssres;
                 }
 
-                let speed = Math.hypot(d.dx, d.dy);
-                let maxSpeed = 6;
-                if (speed > maxSpeed) {
-                    d.dx = (d.dx / speed) * maxSpeed;
-                    d.dy = (d.dy / speed) * maxSpeed;
+                let speedd = Math.hypot(d.dx, d.dy);
+                let maxspeedd = 6;
+                if (speedd > maxspeedd) {
+                    d.dx = (d.dx / speedd) * maxspeedd;
+                    d.dy = (d.dy / speedd) * maxspeedd;
                 }
 
                 d.dx *= 0.98;
                 d.dy *= 0.98;
             }
 
-            for (const burst of burstPoints) {
+            for (const burst of losbursts) {
                 let gx = d.x - burst.x;
                 let gy = d.y - burst.y;
                 let distance = Math.hypot(gx, gy);
                 if (distance < burst.radius) {
                     const influence = 1 - (distance / burst.radius);
                     const push = influence * burst.strength * burst.life;
-                    const safeDistance = Math.max(distance, 1);
-                    const massResistance = getMassResistance(d.atomicWeight);
-                    d.dx += (gx / safeDistance) * push * massResistance;
-                    d.dy += (gy / safeDistance) * push * massResistance;
+                    const safdist = Math.max(distance, 1);
+                    const masssres = getmasssres(d.wegith);
+                    d.dx += (gx / safdist) * push * masssres;
+                    d.dy += (gy / safdist) * push * masssres;
                 }
             }
 
@@ -226,7 +266,7 @@
     }
     function animateyay() {
         yessy = 0;
-        pixelData.fill(0);
+        lodatat.fill(0);
         losphysics();
         dots.forEach(drawdots);
         if (gravityPoint) {
@@ -239,7 +279,7 @@
             ctx.putImageData(imageData, 0, 0);
         }
         dots.forEach(item => {
-            yessy += item.atomicWeight / 602200000000000000000000.00123;
+            yessy += item.wegith / 602200000000000000000000.00123;
         });
         grams.innerText = `${yessy.toFixed(38)} grams`;
         requestAnimationFrame(animateyay);
